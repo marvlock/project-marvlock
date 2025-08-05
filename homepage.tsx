@@ -255,11 +255,11 @@ export default function Component() {
               <div className="text-left space-y-8">
                 <div>
                   <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                    <span className="bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+                    <span className="bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}>
                       Shaping the Future of
                     </span>
                     <br />
-                    <span className="bg-gradient-to-r from-violet-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+                    <span className="bg-gradient-to-r from-violet-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent" style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}>
                       Open Source
                     </span>
                   </h1>
@@ -321,7 +321,7 @@ export default function Component() {
       <section id="about" className="py-16 relative">
         <div className="container mx-auto px-4 lg:px-6 max-w-6xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+            <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}>
               About
             </h2>
             <p className="text-2xl text-purple-200 leading-relaxed max-w-4xl mx-auto mb-12">
@@ -375,7 +375,7 @@ export default function Component() {
       {/* Contribute Section */}
       <section id="contribute" className="py-16 relative">
         <div className="container mx-auto px-4 lg:px-6 max-w-4xl text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}>
             Start Contributing
           </h2>
           <p className="text-xl text-purple-200 mb-12 max-w-2xl mx-auto">
@@ -422,7 +422,7 @@ export default function Component() {
       {/* Community Section */}
       <section id="community" className="py-16 relative">
         <div className="container mx-auto px-4 lg:px-6 max-w-4xl text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}>
             Join Our Community
           </h2>
           <p className="text-xl text-purple-200 mb-12 max-w-2xl mx-auto">

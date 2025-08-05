@@ -29,8 +29,8 @@ export function Loading({ isLoading, message = "Loading..." }: LoadingProps) {
         <div className="mb-8">
           <div className="relative">
             <span 
-              className="text-4xl font-semibold text-white tracking-wide italic animate-pulse" 
-              style={{fontFamily: 'Dancing Script, cursive', fontStyle: 'italic', fontWeight: '600'}}
+              className="text-4xl font-semibold text-white tracking-wide animate-pulse" 
+              style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}
             >
               Marvlock
             </span>

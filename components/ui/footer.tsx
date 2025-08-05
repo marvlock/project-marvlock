@@ -25,7 +25,7 @@ export function Footer() {
                   height={40} 
                   className="mr-3"
                 />
-                <span className="text-3xl font-semibold text-white tracking-wide italic" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+                <span className="text-3xl font-semibold text-white tracking-wide" style={{fontFamily: 'Orbitron, monospace', fontWeight: '700'}}>
                   Marvlock
                 </span>
               </div>
