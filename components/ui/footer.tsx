@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Github, Heart, Shield, Users, Globe } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -16,8 +17,15 @@ export function Footer() {
             
             {/* Brand Section */}
             <div>
-              <div className="mb-6">
-                <span className="text-3xl font-semibold text-white tracking-wide italic" style={{fontFamily: 'Dancing Script, cursive', fontStyle: 'italic', fontWeight: '600'}}>
+              <div className="mb-6 flex items-center">
+                <Image 
+                  src="/marvlock-logo.png" 
+                  alt="Marvlock Logo" 
+                  width={40} 
+                  height={40} 
+                  className="mr-3"
+                />
+                <span className="text-3xl font-semibold text-white tracking-wide italic" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
                   Marvlock
                 </span>
               </div>

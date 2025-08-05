@@ -2,15 +2,18 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Github, Star, GitFork, Users, Code, Zap, Shield, Heart } from "lucide-react"
+import { Github, Star, GitFork, Users, Code, Zap, Shield, Heart, Lightbulb, Globe, Wrench, Heart as HeartIcon, Search, MessageCircle } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { Footer } from "@/components/ui/footer"
+import Image from "next/image"
+import { RandomRipple } from "@/components/ui/random-ripple"
 
 
 export default function Component() {
   const [navVisible, setNavVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [activeSection, setActiveSection] = useState('home')
+  const [isManualNavigation, setIsManualNavigation] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
 
@@ -30,7 +33,7 @@ export default function Component() {
     }
 
     // Track active section
-    const sections = ['home', 'about', 'contribute', 'community', 'blog']
+    const sections = ['home', 'about', 'contribute', 'community']
     
     const updateActiveSection = () => {
       const scrollPosition = window.scrollY + 200
@@ -68,7 +71,10 @@ export default function Component() {
       if (!ticking) {
         requestAnimationFrame(() => {
           controlNavbar()
-          updateActiveSection()
+          // Only update active section if not in manual navigation mode
+          if (!isManualNavigation) {
+            updateActiveSection()
+          }
           ticking = false
         })
         ticking = true
@@ -84,29 +90,19 @@ export default function Component() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      const offsetTop = element.offsetTop - 100 // Account for fixed navbar
-      const startPosition = window.pageYOffset
-      const distance = offsetTop - startPosition
-      const duration = 1200 // 1.2 seconds for ultra-smooth feel
-      let start: number | null = null
+      // Set manual navigation flag and active section
+      setIsManualNavigation(true)
+      setActiveSection(sectionId)
       
-      function animation(currentTime: number) {
-        if (start === null) start = currentTime
-        const timeElapsed = currentTime - start
-        const run = easeInOutCubic(timeElapsed, startPosition, distance, duration)
-        window.scrollTo(0, run)
-        if (timeElapsed < duration) requestAnimationFrame(animation)
-      }
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      })
       
-      // Custom easing function for magical smoothness
-      function easeInOutCubic(t: number, b: number, c: number, d: number): number {
-        t /= d / 2
-        if (t < 1) return c / 2 * t * t * t + b
-        t -= 2
-        return c / 2 * (t * t * t + 2) + b
-      }
-      
-      requestAnimationFrame(animation)
+      // Re-enable auto tracking after a longer delay
+      setTimeout(() => {
+        setIsManualNavigation(false)
+      }, 3000) // Wait 3 seconds for smooth scroll and user interaction
     }
   }
 
@@ -124,20 +120,25 @@ export default function Component() {
   return (
     <div ref={containerRef} className="min-h-screen overflow-x-hidden smooth-scroll" style={{
       background: `
-        radial-gradient(circle at 20% 80%, rgba(88, 28, 135, 0.4) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(30, 58, 138, 0.4) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(107, 33, 168, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 10% 10%, rgba(8, 8, 32, 0.8) 0%, transparent 35%),
+        radial-gradient(circle at 90% 90%, rgba(45, 15, 75, 0.6) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(25, 8, 45, 0.5) 0%, transparent 55%),
         linear-gradient(135deg, 
-          rgba(2, 6, 23, 1) 0%,
-          rgba(8, 14, 44, 1) 25%,
-          rgba(15, 23, 42, 1) 50%,
-          rgba(8, 14, 44, 1) 75%,
-          rgba(2, 6, 23, 1) 100%
+          rgba(5, 5, 20, 1) 0%,
+          rgba(15, 8, 35, 0.95) 15%,
+          rgba(25, 12, 50, 0.9) 30%,
+          rgba(35, 15, 65, 0.85) 45%,
+          rgba(25, 12, 50, 0.9) 60%,
+          rgba(15, 8, 35, 0.95) 75%,
+          rgba(5, 5, 20, 1) 100%
         )
       `,
       backgroundSize: '400% 400%',
       animation: 'gradientShift 15s ease infinite'
     }}>
+      
+      {/* Random Ripple Effect */}
+      <RandomRipple color="rgba(139, 92, 246, 0.1)" size={500} duration={3000} interval={4000} maxRipples={2} />
       
       <style jsx>{`
         @keyframes gradientShift {
@@ -148,14 +149,6 @@ export default function Component() {
         }
         
         html {
-          scroll-behavior: smooth;
-        }
-        
-        body {
-          scroll-behavior: smooth;
-        }
-        
-        * {
           scroll-behavior: smooth;
         }
         
@@ -211,7 +204,6 @@ export default function Component() {
         <NavLink sectionId="about">About</NavLink>
         <NavLink sectionId="contribute">Contribute</NavLink>
         <NavLink sectionId="community">Community</NavLink>
-        <NavLink sectionId="blog">Blog</NavLink>
       </nav>
 
       {/* Hero Section */}
@@ -220,35 +212,76 @@ export default function Component() {
           {/* Top Bar */}
           <div className="flex items-center justify-between pt-8 pb-4">
             <div className="flex items-center">
-              <span className="text-3xl font-semibold text-white tracking-wide italic" style={{fontFamily: 'Dancing Script, cursive', fontStyle: 'italic', fontWeight: '600'}}>Marvlock</span>
+              <Image 
+                src="/marvlock-logo.png" 
+                alt="Marvlock Logo" 
+                width={60} 
+                height={60} 
+              />
             </div>
-            <Button 
-              variant="outline" 
-              size="default" 
-              className="text-white border-white/30 hover:text-white hover:bg-white/15 hover:border-white/50 transition-all duration-300 font-medium cursor-pointer rounded-full bg-white/5 backdrop-blur-sm"
-              asChild
-            >
-              <a href="https://github.com/marvlock" target="_blank" rel="noopener noreferrer">
-                <Github className="w-5 h-5 mr-2" />
-                GitHub
-              </a>
-            </Button>
           </div>
 
           {/* Hero Content */}
-          <div className="flex-1 flex items-center justify-center pt-32">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent italic font-serif">
-                Building the Future of
-                <br />
-                <span className="bg-gradient-to-r from-violet-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-                  Open Source Innovation
-                </span>
-              </h1>
-              <p className="text-xl text-purple-200 max-w-2xl mx-auto mb-8">
-                Project Marvlock is a community-driven organization dedicated to creating powerful, accessible, and
-                innovative open source solutions that empower developers worldwide.
-              </p>
+          <div className="flex-1 flex items-center pt-20">
+            <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto">
+              {/* Left Side - Text Content */}
+              <div className="text-left space-y-8">
+                <div>
+                  <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                    <span className="bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+                      Shaping the Future of
+                    </span>
+                    <br />
+                    <span className="bg-gradient-to-r from-violet-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
+                      Open Source
+                    </span>
+                  </h1>
+                  <p className="text-xl lg:text-2xl text-purple-200 leading-relaxed max-w-2xl">
+                    Project Marvlock is a community-driven organization dedicated to creating powerful, accessible, and
+                    innovative open source solutions that empower developers worldwide.
+                  </p>
+                </div>
+                
+                {/* Call to Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <Button 
+                    className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0 px-12 py-6 text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer"
+                    onClick={() => scrollToSection('about')}
+                  >
+                    Documentation
+                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Button>
+                  <Button 
+                    className="bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 text-white px-12 py-6 text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+                    asChild
+                  >
+                    <a href="https://github.com/marvlock" target="_blank" rel="noopener noreferrer">
+                      <Github className="w-5 h-5 mr-2" />
+                      GitHub
+                      <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Right Side - 3D Logo */}
+              <div className="flex justify-center lg:justify-end items-center">
+                <div className="relative">
+                  <Image 
+                    src="/marvlock-logo-3d.png" 
+                    alt="Marvlock 3D Logo" 
+                    width={500} 
+                    height={500} 
+                    className="drop-shadow-2xl animate-float"
+                  />
+                  {/* Glow effect behind the logo */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-400/20 to-purple-500/20 rounded-full blur-3xl scale-110 animate-pulse"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -258,10 +291,10 @@ export default function Component() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="min-h-screen flex items-center py-20 relative">
+      <section id="about" className="py-16 relative">
         <div className="container mx-auto px-4 lg:px-6 max-w-6xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent italic font-serif">
+            <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
               About
             </h2>
             <p className="text-2xl text-purple-200 leading-relaxed max-w-4xl mx-auto mb-12">
@@ -273,19 +306,19 @@ export default function Component() {
                 <h3 className="text-xl font-semibold text-white mb-6">Core Values</h3>
                 <div className="space-y-4">
                   <div className="flex items-center text-purple-200">
-                    <span className="text-2xl mr-3">🧠</span>
+                    <Lightbulb className="w-6 h-6 mr-3 text-violet-400" />
                     <span>Innovation through collaboration</span>
                   </div>
                   <div className="flex items-center text-purple-200">
-                    <span className="text-2xl mr-3">🌍</span>
+                    <Globe className="w-6 h-6 mr-3 text-violet-400" />
                     <span>Accessibility for all</span>
                   </div>
                   <div className="flex items-center text-purple-200">
-                    <span className="text-2xl mr-3">🛠️</span>
+                    <Wrench className="w-6 h-6 mr-3 text-violet-400" />
                     <span>Build in public</span>
                   </div>
                   <div className="flex items-center text-purple-200">
-                    <span className="text-2xl mr-3">❤️</span>
+                    <HeartIcon className="w-6 h-6 mr-3 text-violet-400" />
                     <span>Developer-first approach</span>
                   </div>
                 </div>
@@ -294,11 +327,11 @@ export default function Component() {
               <div className="text-left">
                 <h3 className="text-xl font-semibold text-white mb-6">What We Do</h3>
                 <p className="text-purple-200 leading-relaxed mb-6">
-                  We create and maintain tools, libraries, and platforms that simplify development workflows, promote learning, and encourage open contributions.
+                We build powerful tools, libraries, and platforms that streamline workflows, fuel learning, and empower anyone to contribute—developers, tinkerers, and curious minds alike.
                 </p>
                 <h3 className="text-xl font-semibold text-white mb-6">Origin Story</h3>
                 <p className="text-purple-200 leading-relaxed">
-                  Born from a late-night GitHub issue thread and a vision to simplify tooling, Project Marvlock began in 2025 with just one repo and a handful of contributors.
+                Started by two student devs who believed open source could be cooler and decided to prove it.
                 </p>
               </div>
             </div>
@@ -313,40 +346,46 @@ export default function Component() {
 
 
       {/* Contribute Section */}
-      <section id="contribute" className="min-h-screen flex items-center py-20 relative">
+      <section id="contribute" className="py-16 relative">
         <div className="container mx-auto px-4 lg:px-6 max-w-4xl text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent italic font-serif">
+          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
             Start Contributing
           </h2>
           <p className="text-xl text-purple-200 mb-12 max-w-2xl mx-auto">
             Whether you're a seasoned developer or just starting out, there's a place for you in our community.
           </p>
           
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-12">
-            <h3 className="text-2xl font-bold text-white mb-8">How to Get Involved</h3>
-            <div className="grid md:grid-cols-3 gap-8 text-left">
-              <div>
-                <div className="w-12 h-12 bg-gradient-to-br from-violet-400 to-purple-500 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-white font-bold">1</span>
+          <div className="grid md:grid-cols-3 gap-6 text-center">
+            {[
+              {
+                title: "Explore",
+                desc: "Discover repositories and ideas that match your interests.",
+                icon: "Search",
+              },
+              {
+                title: "Connect",
+                desc: "Jump into discussions and introduce yourself to the community.",
+                icon: "MessageCircle",
+              },
+              {
+                title: "Contribute",
+                desc: "Start small and gradually make larger impact.",
+                icon: "GitFork",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="p-8 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 hover:bg-white/10 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 group"
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-violet-400/20 to-purple-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-violet-400/30 group-hover:to-purple-500/30 transition-all duration-300">
+                  {item.icon === "Search" && <Search className="w-8 h-8 text-violet-400" />}
+                  {item.icon === "MessageCircle" && <MessageCircle className="w-8 h-8 text-violet-400" />}
+                  {item.icon === "GitFork" && <GitFork className="w-8 h-8 text-violet-400" />}
                 </div>
-                <h4 className="text-lg font-semibold text-white mb-2">Explore</h4>
-                <p className="text-purple-200 text-sm">Browse our repositories and find projects that interest you.</p>
+                <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                <p className="text-sm text-purple-200 leading-relaxed">{item.desc}</p>
               </div>
-              <div>
-                <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-white font-bold">2</span>
-                </div>
-                <h4 className="text-lg font-semibold text-white mb-2">Connect</h4>
-                <p className="text-purple-200 text-sm">Join our community discussions and introduce yourself.</p>
-              </div>
-              <div>
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-white font-bold">3</span>
-                </div>
-                <h4 className="text-lg font-semibold text-white mb-2">Contribute</h4>
-                <p className="text-purple-200 text-sm">Start with small issues and grow into larger contributions.</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         
@@ -354,9 +393,9 @@ export default function Component() {
       </section>
 
       {/* Community Section */}
-      <section id="community" className="min-h-screen flex items-center py-20 relative">
+      <section id="community" className="py-16 relative">
         <div className="container mx-auto px-4 lg:px-6 max-w-4xl text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent italic font-serif">
+          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
             Join Our Community
           </h2>
           <p className="text-xl text-purple-200 mb-12 max-w-2xl mx-auto">
@@ -408,29 +447,7 @@ export default function Component() {
         <div className="absolute bottom-0 left-0 right-0 h-32 section-transition"></div>
       </section>
 
-      {/* Blog Section */}
-      <section id="blog" className="min-h-screen flex items-center py-20 relative">
-        <div className="container mx-auto px-4 lg:px-6 max-w-4xl text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent italic font-serif">
-            Latest Updates
-          </h2>
-          <p className="text-xl text-purple-200 mb-12 max-w-2xl mx-auto">
-            Stay updated with our latest developments, tutorials, and community highlights.
-          </p>
-          
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-12">
-            <h3 className="text-2xl font-bold text-white mb-8">Coming Soon</h3>
-            <p className="text-purple-200 mb-8">
-              We're preparing exciting content including development tutorials, project showcases, and community spotlights.
-            </p>
-            <Button className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0 px-8 py-3 rounded-full cursor-pointer">
-              Subscribe for Updates
-            </Button>
-          </div>
-        </div>
-        
-        <div className="absolute bottom-0 left-0 right-0 h-32 section-transition"></div>
-      </section>
+
 
       <Footer />
     </div>
