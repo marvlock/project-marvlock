@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Github, Star, GitFork, Users, Code, Zap, Shield, Heart, Lightbulb, Globe, Wrench, Heart as HeartIcon, Search, MessageCircle } from "lucide-react"
+import { Github, Star, GitFork, Users, Code, Zap, Shield, Heart, Lightbulb, Globe, Wrench, Heart as HeartIcon, Search, MessageCircle, Menu, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { Footer } from "@/components/ui/footer"
 import Image from "next/image"
@@ -14,6 +14,7 @@ export default function Component() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [activeSection, setActiveSection] = useState('home')
   const [isManualNavigation, setIsManualNavigation] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
 
@@ -106,9 +107,12 @@ export default function Component() {
     }
   }
 
-  const NavLink = ({ href, children, sectionId }: { href?: string; children: React.ReactNode; sectionId: string }) => (
+  const NavLink = ({ href, children, sectionId, onClick }: { href?: string; children: React.ReactNode; sectionId: string; onClick?: () => void }) => (
     <button 
-      onClick={() => scrollToSection(sectionId)}
+      onClick={() => {
+        scrollToSection(sectionId)
+        if (onClick) onClick()
+      }}
       className={`text-white/90 hover:text-white hover:bg-white/15 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm cursor-pointer ${
         activeSection === sectionId ? 'bg-white/20 text-white' : ''
       }`}
@@ -198,13 +202,36 @@ export default function Component() {
         }
       `}</style>
 
-      {/* Floating Navigation */}
+      {/* Desktop Navigation */}
       <nav className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-50 hidden lg:flex items-center bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-4 py-3 shadow-xl shadow-black/20 transition-all duration-500 ease-out ${navVisible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0'}`}>
         <NavLink sectionId="home">Home</NavLink>
         <NavLink sectionId="about">About</NavLink>
         <NavLink sectionId="contribute">Contribute</NavLink>
         <NavLink sectionId="community">Community</NavLink>
       </nav>
+
+      {/* Mobile Navigation */}
+      <div className="lg:hidden fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-white hover:bg-white/20 transition-all duration-300"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`lg:hidden fixed inset-0 z-40 transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
+        <div className={`absolute top-0 right-0 w-64 h-full bg-white/10 backdrop-blur-2xl border-l border-white/20 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="p-6 flex flex-col space-y-4">
+            <NavLink sectionId="home" onClick={() => setMobileMenuOpen(false)}>Home</NavLink>
+            <NavLink sectionId="about" onClick={() => setMobileMenuOpen(false)}>About</NavLink>
+            <NavLink sectionId="contribute" onClick={() => setMobileMenuOpen(false)}>Contribute</NavLink>
+            <NavLink sectionId="community" onClick={() => setMobileMenuOpen(false)}>Community</NavLink>
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex flex-col relative">
@@ -227,7 +254,7 @@ export default function Component() {
               {/* Left Side - Text Content */}
               <div className="text-left space-y-8">
                 <div>
-                  <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                  <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
                     <span className="bg-gradient-to-r from-white via-violet-200 to-purple-300 bg-clip-text text-transparent" style={{fontFamily: 'Sacramento, cursive', fontStyle: 'italic', fontWeight: 'bold'}}>
                       Shaping the Future of
                     </span>
@@ -236,7 +263,7 @@ export default function Component() {
                       Open Source
                     </span>
                   </h1>
-                  <p className="text-xl lg:text-2xl text-purple-200 leading-relaxed max-w-2xl">
+                  <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 leading-relaxed max-w-2xl">
                     Project Marvlock is a community-driven organization dedicated to creating powerful, accessible, and
                     innovative open source solutions that empower developers worldwide.
                   </p>
@@ -245,22 +272,22 @@ export default function Component() {
                 {/* Call to Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <Button 
-                    className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0 px-12 py-6 text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer"
+                    className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer"
                     onClick={() => scrollToSection('about')}
                   >
                     Documentation
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </Button>
                   <Button 
-                    className="bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 text-white px-12 py-6 text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+                    className="bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 text-white px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
                     asChild
                   >
                     <a href="https://github.com/marvlock" target="_blank" rel="noopener noreferrer">
-                      <Github className="w-5 h-5 mr-2" />
+                      <Github className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       GitHub
-                      <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
                     </a>
@@ -276,7 +303,7 @@ export default function Component() {
                     alt="Marvlock 3D Logo" 
                     width={500} 
                     height={500} 
-                    className="drop-shadow-2xl animate-float"
+                    className="drop-shadow-2xl animate-float w-64 h-64 lg:w-[500px] lg:h-[500px]"
                   />
                   {/* Glow effect behind the logo */}
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-400/20 to-purple-500/20 rounded-full blur-3xl scale-110 animate-pulse"></div>
