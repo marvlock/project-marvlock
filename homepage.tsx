@@ -275,7 +275,7 @@ export default function Component() {
                     className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer"
                     onClick={() => scrollToSection('about')}
                   >
-                    About
+                    Documentation
                     <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
