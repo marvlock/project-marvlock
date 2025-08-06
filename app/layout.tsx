@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AppWrapper } from '@/components/ui/app-wrapper'
 
 export const metadata: Metadata = {
   title: 'Project Marvlock',
@@ -45,7 +46,11 @@ html {
 }
         `}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <AppWrapper>
+          {children}
+        </AppWrapper>
+      </body>
     </html>
   )
 }

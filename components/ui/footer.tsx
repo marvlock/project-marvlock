@@ -108,9 +108,9 @@ export function Footer() {
                 © 2025 Project Marvlock. All rights reserved.
               </p>
               <div className="flex items-center text-purple-300 text-sm">
-                <span>Made with</span>
+                <span>Made with </span>
                 <Heart className="w-4 h-4 mx-1 text-red-400" />
-                <span>by the Marvlock community</span>
+                <span> by the Marvlock community</span>
               </div>
             </div>
           </div>
